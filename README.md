@@ -1,61 +1,61 @@
-# minhthuan073
-#include <iostream>
-#include <string>
-#include <vector>
-using namespace std;
-
-struct SinhVien {
-    string hoTen;
-    string maSo;
-    float diemTB;
+#include <stdio.h>
+#include <strings.h>
+struct HOCSINH
+{
+	char HoTen[30];
+    int DiemToan, DiemVan;
+    float DiemTB;
 };
-
-void nhapThongTin(SinhVien &sv) {
-    cout << "Nhap ma so sinh vien (nhap '0' de dung): ";
-    getline(cin, sv.maSo);
-    if (sv.maSo == "0") return;
-
-    cout << "Nhap ho ten: ";
-    getline(cin, sv.hoTen);
-    cout << "Nhap diem trung binh: ";
-    cin >> sv.diemTB;
-    cin.ignore(); // bỏ dòng newline còn lại
+struct LOPHOC{
+	char tenlop[30];
+	int siso; // so luong hoc sinh thuc te
+	HOCSINH hs[100];	// danh sach toi da nhieu hs
+};
+// cau 1: hay nhap , xuat danh sach gom nhieu lop hoc	
+void Nhap1HS(HOCSINH &hs) {
+		fflush(stdin);
+	printf("hay nhap hoten:\n"); gets(hs.HoTen);
+	printf("hay diem toan:\n"); scanf("%d",&hs.DiemToan);
+	printf("hay diem van:\n"); scanf("%d",&hs.DiemVan);
+	hs.DiemTB=(hs.DiemToan+hs.DiemVan)/2;
 }
-
-void xuatThongTin(const SinhVien &sv) {
-    cout << "Ho ten: " << sv.hoTen 
-         << ", MSSV: " << sv.maSo 
-         << ", Diem TB: " << sv.diemTB << endl;
+void Nhap1LOP(LOPHOC &lop)
+{	
+	fflush(stdin);
+	printf("hay nhap ten lop:\n"); gets(lop.tenlop);    
+	printf("hay nhap si so lop:\n"); scanf("%d",&lop.siso);
+	for(int i=0;i<lop.siso;i++)
+	Nhap1HS(lop.hs[i]);		// Nhap tung HocSinh trong lop do
 }
-
-int main() {
-    vector<SinhVien> danhSach;
-    while (true) {
-        SinhVien sv;
-        nhapThongTin(sv);
-        if (sv.maSo == "0") break;
-        danhSach.push_back(sv);
-    }
-
-    cout << "\nDanh sach sinh vien da nhap:\n";
-    for (const auto &sv : danhSach) {
-        xuatThongTin(sv);
-    }
-
-    // Tìm sinh viên có điểm cao nhất (nếu có sinh viên)
-    if (!danhSach.empty()) {
-        int index = 0;
-        for (int i = 1; i < danhSach.size(); ++i) {
-            if (danhSach[i].diemTB > danhSach[index].diemTB) {
-                index = i;
-            }
-        }
-
-        cout << "\nSinh vien co diem trung binh cao nhat:\n";
-        xuatThongTin(danhSach[index]);
-    } else {
-        cout << "\nKhong co sinh vien nao duoc nhap.\n";
-    }
-
-    return 0;
+void NhapDSNhieuLop(LOPHOC lop[100], int &n)
+{	printf("nhap so luong lop hoc:\n");scanf("%d",&n);
+	for(int i=0;i<n;i++)   
+	{
+			printf("lop thu %d \n",i+1);
+			Nhap1LOP(lop[i]);
+	}
+}
+// cau 2: xuat nhieu lop hoc
+void Xuat1HS(HOCSINH hs) {
+	printf(" hoten :  %s\n",hs.HoTen);
+	printf("diem toan: %d \n",hs.DiemToan);
+	printf("diem van: %d \n" ,hs.DiemVan);
+	printf("diem trung binh %f \n" ,hs.DiemTB);
+}
+void Xuat1LOP(LOPHOC lop)
+{	
+	printf("ten lop: %s \n",lop.tenlop);      
+	printf("si so lop: %d \n", lop.siso);
+	for(int i=0;i<lop.siso;i++)
+	Xuat1HS(lop.hs[i]);		// Xuat tung HocSinh trong lop do
+}
+void XuatDSNhieuLop(LOPHOC lop[100], int n)
+{	printf("so luong lop hoc: %d \n",n);
+	for(int i=0;i<n;i++)   Xuat1LOP(lop[i]);
+}					// cau 3: hay in ra cac hoc sinh dtb >5.0 cua tat ca cac lop
+int main()
+{
+	LOPHOC lop[100]; int n;
+	NhapDSNhieuLop(lop,n); XuatDSNhieuLop(lop,n);
+	return 1;
 }
